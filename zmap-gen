@@ -2,13 +2,9 @@
 from tqdm import tqdm
 import requests
 
-def save(textline):
-  with open("proxy.sh", "a", encoding="utf-8") as p:
-    p.write(textline.strip()+'\n')
-
 def generate(country, port):
-  py_str = f’zmap -w {country}.zone -p {port}  | ./maoscanv1 -p {port}‘
-  save(textline)
+  py_str = f'zmap -w {country}.zone -p {port}  | ./maoscanv1 -p {port}'
+  print(py_str)
 
 def download():
   url = 'https://www.ipdeny.com/ipblocks/data/countries/all-zones.tar.gz'
@@ -24,9 +20,10 @@ def download():
 def main():
   with open("ports.txt","r",encoding="utf-8") as f:
     for ports in f:
-      with open('zone_names', 'r', encoding='utf-8') a m:
+      with open('zone_names', 'r', encoding='utf-8') as m:
         for country in m:
           generate(country, ports.strip())
 
-if __name__ == "__main_":
+if __name__ == "__main__":
+  download()
   main()
