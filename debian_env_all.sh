@@ -1,121 +1,116 @@
-#!/bin/bash
-# debian-all-env-conf
-apt update
-apt install apt-transport-https -y
-rm -rf /etc/apt/sources.list
-echo "deb http://ftp.debian.org/debian bookworm main non-free-firmware" >> /etc/apt/sources.list
-echo "deb https://ftp.debian.org/debian/ bookworm-updates bookworm main" >> /etc/apt/sources.list
-echo "deb https://security.debian.org/debian-security/ bookworm-security bookworm main" >> /etc/apt/sources.list
-apt update && apt upgrade -y
-apt install -y unhide unhide-gui unhide-tcp unattended-upgrades tiger tcpd setools sepol-utils nmap arpwatch mctrans auditd syslog-ng lynis debsecan unzip debian-security-support chkrootkit rkhunter checkpolicy apparmor-profiles apparmor-profiles-extra apticron arpalert debdelta apt-listdifferences apt-listbugs tiger
-
-wget https://github.com/ovh/debian-cis/archive/refs/heads/master.zip
-unzip master.zip
-mv debian-cis cis
-chown root:root cis
-cd ~/cis
-cp debian/default /etc/default/cis-hardening
-sed -i "s#CIS_LIB_DIR=.*#CIS_LIB_DIR='$(pwd)'/lib#" /etc/default/cis-hardening
-sed -i "s#CIS_CHECKS_DIR=.*#CIS_CHECKS_DIR='$(pwd)'/bin/hardening#" /etc/default/cis-hardening
-sed -i "s#CIS_CONF_DIR=.*#CIS_CONF_DIR='$(pwd)'/etc#" /etc/default/cis-hardening
-sed -i "s#CIS_TMP_DIR=.*#CIS_TMP_DIR='$(pwd)'/tmp#" /etc/default/cis-hardening
-./bin/hardening.sh --audit
-sleep 1
-cd ~/cis/etc/conf.d
-sed -i 's/=audit/=enabled/g' 4.1.3_record_date_time_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.4_record_user_group_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.5_record_network_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.6_record_mac_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.7_record_login_logout.cfg
-sed -i 's/=audit/=enabled/g' 4.1.8_record_session_init.cfg
-sed -i 's/=audit/=enabled/g' 4.1.9_record_dac_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.10_record_failed_access_file.cfg
-sed -i 's/=audit/=enabled/g' 4.1.11_record_privileged_commands.cfg
-sed -i 's/=audit/=enabled/g' 4.1.12_record_successful_mount.cfg
-sed -i 's/=audit/=enabled/g' 4.1.13_record_file_deletions.cfg
-sed -i 's/=audit/=enabled/g' 4.2.3_logs_permissions.cfg
-sed -i 's/=audit/=enabled/g' 4.1.14_record_sudoers_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.15_record_sudo_usage.cfg
-sed -i 's/=audit/=enabled/g' 4.1.16_record_kernel_modules.cfg
-sed -i 's/=audit/=enabled/g' 5.1.1_enable_cron.cfg
-sed -i 's/=audit/=enabled/g' 5.1.8_cron_users.cfg
-sed -i 's/=audit/=enabled/g' 5.1.2_crontab_perm_ownership.cfg
-sed -i 's/=audit/=enabled/g' 5.1.3_cron_hourly_perm_ownership.cfg
-sed -i 's/=audit/=enabled/g' 5.1.4_cron_daily_perm_ownership.cfg
-sed -i 's/=audit/=enabled/g' 5.1.5_cron_weekly_perm_ownership.cfg
-sed -i 's/=audit/=enabled/g' 5.1.6_cron_monthly_perm_ownership.cfg
-sed -i 's/=audit/=enabled/g' 5.1.7_cron_d_perm_ownership.cfg
-sed -i 's/=audit/=enabled/g' 5.2.5_sshd_loglevel.cfg
-sed -i 's/=audit/=enabled/g' 5.2.6_disable_x11_forwarding.cfg
-sed -i 's/=audit/=enabled/g' 5.2.7_sshd_maxauthtries.cfg
-sed -i 's/=audit/=enabled/g' 5.2.11_disable_sshd_permitemptypasswords.cfg
-#syslog
-sed -i 's/=audit/=enabled/g' 4.1.17_freeze_auditd_conf.cfg
-sed -i 's/=audit/=enabled/g' 4.2.1.1_install_syslog-ng.cfg
-sed -i 's/=audit/=enabled/g' 4.2.1.2_enable_syslog-ng.cfg
-sed -i 's/=audit/=enabled/g' 4.2.1.3_configure_syslog-ng.cfg
-sed -i 's/=audit/=enabled/g' 4.2.1.4_syslog_ng_logfiles_perm.cfg
-#log
-sed -i 's/=audit/=enabled/g' 4.1.16_record_kernel_modules.cfg
-sed -i 's/=audit/=enabled/g' 4.1.15_record_sudo_usage.cfg
-sed -i 's/=audit/=enabled/g' 4.1.14_record_sudoers_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.13_record_file_deletions.cfg
-sed -i 's/=audit/=enabled/g' 4.1.12_record_successful_mount.cfg
-sed -i 's/=audit/=enabled/g' 4.1.11_record_privileged_commands.cfg
-sed -i 's/=audit/=enabled/g' 4.1.10_record_failed_access_file.cfg
-sed -i 's/=audit/=enabled/g' 4.1.9_record_dac_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.8_record_session_init.cfg
-sed -i 's/=audit/=enabled/g' 4.1.7_record_login_logout.cfg
-sed -i 's/=audit/=enabled/g' 4.1.6_record_mac_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.5_record_network_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.4_record_user_group_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.3_record_date_time_edit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.2.3_keep_all_audit_logs.cfg
-sed -i 's/=audit/=enabled/g' 4.1.2.2_halt_when_audit_log_full.cfg
-sed -i 's/=audit/=enabled/g' 4.1.2.1_audit_log_storage.cfg
-sed -i 's/=audit/=enabled/g' 4.1.1.4_audit_backlog_limit.cfg
-sed -i 's/=audit/=enabled/g' 4.1.1.3_audit_bootloader.cfg
-sed -i 's/=audit/=enabled/g' 1.3.3_logfile_sudo.cfg
-sed -i 's/=audit/=enabled/g' 4.1.1.1_install_auditd.cfg
-sed -i 's/=audit/=enabled/g' 4.1.1.2_enable_auditd.cfg
-sed -i 's/=audit/=enabled/g' 1.6.4_restrict_core_dumps.cfg
-#protocol
-sed -i 's/=audit/=enabled/g' 3.4.3_disable_rds.cfg
-sed -i 's/=audit/=enabled/g' 3.4.4_disable_tipc.cfg
-sed -i 's/=audit/=enabled/g' 3.4.2_disable_sctp.cfg
-sed -i 's/=audit/=enabled/g' 3.4.1_disable_dccp.cfg
-#ipv6
-sed -i 's/=audit/=enabled/g' 3.3.9_disable_ipv6_router_advertisement.cfg
-sed -i 's/=audit/=enabled/g' 3.3.7_enable_source_route_validation.cfg
-sed -i 's/=audit/=enabled/g' 3.3.8_enable_tcp_syn_cookies.cfg
-sed -i 's/=audit/=enabled/g' 3.3.4_log_martian_packets.cfg
-sed -i 's/=audit/=enabled/g' 3.3.3_disable_secure_icmp_redirect.cfg
-sed -i 's/=audit/=enabled/g' 3.3.3_disable_secure_icmp_redirect.cfg
-sed -i 's/=audit/=enabled/g' 3.3.1_disable_source_routed_packets.cfg
-sed -i 's/=audit/=enabled/g' 3.2.1_disable_send_packet_redirects.cfg
-sed -i 's/=audit/=enabled/g' 3.1.1_disable_ipv6.cfg
-sed -i 's/=audit/=enabled/g' 2.2.15_mta_localhost.cfg
-##apparmor
-sed -i 's/=audit/=enabled/g' 1.7.1.1_install_apparmor.cfg
-sed -i 's/=audit/=enabled/g' 1.7.1.2_enable_apparmor.cfg
-sed -i 's/=audit/=enabled/g' 1.7.1.3_enforce_or_complain_apparmor.cfg
-sed -i 's/=audit/=enabled/g' 1.7.1.4_enforcing_apparmor.cfg
-##tripwire
-sed -i 's/=audit/=enabled/g' 1.4.2_tripwire_cron.cfg
-##remotedevice
-sed -i 's/=audit/=enabled/g' 1.1.23_disable_usb_storage.cfg
-sed -i 's/=audit/=enabled/g' 1.1.20_removable_device_noexec.cfg
-sed -i 's/=audit/=enabled/g' 1.1.19_removable_device_nosuid.cfg
-sed -i 's/=audit/=enabled/g' 1.1.18_removable_device_nodev.cfg
-sed -i 's/=audit/=enabled/g' 1.1.17_run_shm_noexec.cfg
-#fs mode
-sed -i 's/=audit/=enabled/g' 1.1.1.6_disable_udf.cfg
-sed -i 's/=audit/=enabled/g' 1.1.1.4_disable_hfsplus.cfg
-sed -i 's/=audit/=enabled/g' 1.1.1.3_disable_hfs.cfg
-sed -i 's/=audit/=enabled/g' 1.1.1.2_disable_jffs2.cfg
-sed -i 's/=audit/=enabled/g' 1.1.1.1_disable_freevxfs.cfg
-cd ~/cis
-./bin/hardening.sh --apply
-cd ~/
-rm -rf cis
-history -c 2&>/dev/null
+echo "echo <script_name> | base64 -d | bash"
+IyEvYmluL2Jhc2gKIyBkZWJpYW4tYWxsLWVudi1jb25mCmFwdCB1cGRhdGUKYXB0IGluc3RhbGwg
+YXB0LXRyYW5zcG9ydC1odHRwcyAteQpybSAtcmYgL2V0Yy9hcHQvc291cmNlcy5saXN0CmVjaG8g
+ImRlYiBodHRwOi8vZnRwLmRlYmlhbi5vcmcvZGViaWFuIGJvb2t3b3JtIG1haW4gbm9uLWZyZWUt
+ZmlybXdhcmUiID4+IC9ldGMvYXB0L3NvdXJjZXMubGlzdAplY2hvICJkZWIgaHR0cHM6Ly9mdHAu
+ZGViaWFuLm9yZy9kZWJpYW4vIGJvb2t3b3JtLXVwZGF0ZXMgYm9va3dvcm0gbWFpbiIgPj4gL2V0
+Yy9hcHQvc291cmNlcy5saXN0CmVjaG8gImRlYiBodHRwczovL3NlY3VyaXR5LmRlYmlhbi5vcmcv
+ZGViaWFuLXNlY3VyaXR5LyBib29rd29ybS1zZWN1cml0eSBib29rd29ybSBtYWluIiA+PiAvZXRj
+L2FwdC9zb3VyY2VzLmxpc3QKYXB0IHVwZGF0ZSAmJiBhcHQgdXBncmFkZSAteQphcHQgaW5zdGFs
+bCAteSB1bmhpZGUgdW5oaWRlLWd1aSB1bmhpZGUtdGNwIHVuYXR0ZW5kZWQtdXBncmFkZXMgdGln
+ZXIgdGNwZCBzZXRvb2xzIHNlcG9sLXV0aWxzIG5tYXAgYXJwd2F0Y2ggbWN0cmFucyBhdWRpdGQg
+c3lzbG9nLW5nIGx5bmlzIGRlYnNlY2FuIHVuemlwIGRlYmlhbi1zZWN1cml0eS1zdXBwb3J0IGNo
+a3Jvb3RraXQgcmtodW50ZXIgY2hlY2twb2xpY3kgYXBwYXJtb3ItcHJvZmlsZXMgYXBwYXJtb3It
+cHJvZmlsZXMtZXh0cmEgYXB0aWNyb24gYXJwYWxlcnQgZGViZGVsdGEgYXB0LWxpc3RkaWZmZXJl
+bmNlcyBhcHQtbGlzdGJ1Z3MgdGlnZXIKCndnZXQgaHR0cHM6Ly9naXRodWIuY29tL292aC9kZWJp
+YW4tY2lzL2FyY2hpdmUvcmVmcy9oZWFkcy9tYXN0ZXIuemlwCnVuemlwIG1hc3Rlci56aXAKbXYg
+ZGViaWFuLWNpcyBjaXMKY2hvd24gcm9vdDpyb290IGNpcwpjZCB+L2NpcwpjcCBkZWJpYW4vZGVm
+YXVsdCAvZXRjL2RlZmF1bHQvY2lzLWhhcmRlbmluZwpzZWQgLWkgInMjQ0lTX0xJQl9ESVI9Lioj
+Q0lTX0xJQl9ESVI9JyQocHdkKScvbGliIyIgL2V0Yy9kZWZhdWx0L2Npcy1oYXJkZW5pbmcKc2Vk
+IC1pICJzI0NJU19DSEVDS1NfRElSPS4qI0NJU19DSEVDS1NfRElSPSckKHB3ZCknL2Jpbi9oYXJk
+ZW5pbmcjIiAvZXRjL2RlZmF1bHQvY2lzLWhhcmRlbmluZwpzZWQgLWkgInMjQ0lTX0NPTkZfRElS
+PS4qI0NJU19DT05GX0RJUj0nJChwd2QpJy9ldGMjIiAvZXRjL2RlZmF1bHQvY2lzLWhhcmRlbmlu
+ZwpzZWQgLWkgInMjQ0lTX1RNUF9ESVI9LiojQ0lTX1RNUF9ESVI9JyQocHdkKScvdG1wIyIgL2V0
+Yy9kZWZhdWx0L2Npcy1oYXJkZW5pbmcKLi9iaW4vaGFyZGVuaW5nLnNoIC0tYXVkaXQKc2xlZXAg
+MQpjZCB+L2Npcy9ldGMvY29uZi5kCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4xLjNf
+cmVjb3JkX2RhdGVfdGltZV9lZGl0LmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDQu
+MS40X3JlY29yZF91c2VyX2dyb3VwX2VkaXQuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQv
+ZycgNC4xLjVfcmVjb3JkX25ldHdvcmtfZWRpdC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxl
+ZC9nJyA0LjEuNl9yZWNvcmRfbWFjX2VkaXQuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQv
+ZycgNC4xLjdfcmVjb3JkX2xvZ2luX2xvZ291dC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxl
+ZC9nJyA0LjEuOF9yZWNvcmRfc2Vzc2lvbl9pbml0LmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFi
+bGVkL2cnIDQuMS45X3JlY29yZF9kYWNfZWRpdC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxl
+ZC9nJyA0LjEuMTBfcmVjb3JkX2ZhaWxlZF9hY2Nlc3NfZmlsZS5jZmcKc2VkIC1pICdzLz1hdWRp
+dC89ZW5hYmxlZC9nJyA0LjEuMTFfcmVjb3JkX3ByaXZpbGVnZWRfY29tbWFuZHMuY2ZnCnNlZCAt
+aSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4xLjEyX3JlY29yZF9zdWNjZXNzZnVsX21vdW50LmNm
+ZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS4xM19yZWNvcmRfZmlsZV9kZWxldGlv
+bnMuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4yLjNfbG9nc19wZXJtaXNzaW9u
+cy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuMTRfcmVjb3JkX3N1ZG9lcnNf
+ZWRpdC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuMTVfcmVjb3JkX3N1ZG9f
+dXNhZ2UuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4xLjE2X3JlY29yZF9rZXJu
+ZWxfbW9kdWxlcy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA1LjEuMV9lbmFibGVf
+Y3Jvbi5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA1LjEuOF9jcm9uX3VzZXJzLmNm
+ZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDUuMS4yX2Nyb250YWJfcGVybV9vd25lcnNo
+aXAuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNS4xLjNfY3Jvbl9ob3VybHlfcGVy
+bV9vd25lcnNoaXAuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNS4xLjRfY3Jvbl9k
+YWlseV9wZXJtX293bmVyc2hpcC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA1LjEu
+NV9jcm9uX3dlZWtseV9wZXJtX293bmVyc2hpcC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxl
+ZC9nJyA1LjEuNl9jcm9uX21vbnRobHlfcGVybV9vd25lcnNoaXAuY2ZnCnNlZCAtaSAncy89YXVk
+aXQvPWVuYWJsZWQvZycgNS4xLjdfY3Jvbl9kX3Blcm1fb3duZXJzaGlwLmNmZwpzZWQgLWkgJ3Mv
+PWF1ZGl0Lz1lbmFibGVkL2cnIDUuMi41X3NzaGRfbG9nbGV2ZWwuY2ZnCnNlZCAtaSAncy89YXVk
+aXQvPWVuYWJsZWQvZycgNS4yLjZfZGlzYWJsZV94MTFfZm9yd2FyZGluZy5jZmcKc2VkIC1pICdz
+Lz1hdWRpdC89ZW5hYmxlZC9nJyA1LjIuN19zc2hkX21heGF1dGh0cmllcy5jZmcKc2VkIC1pICdz
+Lz1hdWRpdC89ZW5hYmxlZC9nJyA1LjIuMTFfZGlzYWJsZV9zc2hkX3Blcm1pdGVtcHR5cGFzc3dv
+cmRzLmNmZwojc3lzbG9nCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4xLjE3X2ZyZWV6
+ZV9hdWRpdGRfY29uZi5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjIuMS4xX2lu
+c3RhbGxfc3lzbG9nLW5nLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDQuMi4xLjJf
+ZW5hYmxlX3N5c2xvZy1uZy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjIuMS4z
+X2NvbmZpZ3VyZV9zeXNsb2ctbmcuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4y
+LjEuNF9zeXNsb2dfbmdfbG9nZmlsZXNfcGVybS5jZmcKI2xvZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1l
+bmFibGVkL2cnIDQuMS4xNl9yZWNvcmRfa2VybmVsX21vZHVsZXMuY2ZnCnNlZCAtaSAncy89YXVk
+aXQvPWVuYWJsZWQvZycgNC4xLjE1X3JlY29yZF9zdWRvX3VzYWdlLmNmZwpzZWQgLWkgJ3MvPWF1
+ZGl0Lz1lbmFibGVkL2cnIDQuMS4xNF9yZWNvcmRfc3Vkb2Vyc19lZGl0LmNmZwpzZWQgLWkgJ3Mv
+PWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS4xM19yZWNvcmRfZmlsZV9kZWxldGlvbnMuY2ZnCnNlZCAt
+aSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4xLjEyX3JlY29yZF9zdWNjZXNzZnVsX21vdW50LmNm
+ZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS4xMV9yZWNvcmRfcHJpdmlsZWdlZF9j
+b21tYW5kcy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuMTBfcmVjb3JkX2Zh
+aWxlZF9hY2Nlc3NfZmlsZS5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuOV9y
+ZWNvcmRfZGFjX2VkaXQuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgNC4xLjhfcmVj
+b3JkX3Nlc3Npb25faW5pdC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuN19y
+ZWNvcmRfbG9naW5fbG9nb3V0LmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS42
+X3JlY29yZF9tYWNfZWRpdC5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuNV9y
+ZWNvcmRfbmV0d29ya19lZGl0LmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS40
+X3JlY29yZF91c2VyX2dyb3VwX2VkaXQuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycg
+NC4xLjNfcmVjb3JkX2RhdGVfdGltZV9lZGl0LmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVk
+L2cnIDQuMS4yLjNfa2VlcF9hbGxfYXVkaXRfbG9ncy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5h
+YmxlZC9nJyA0LjEuMi4yX2hhbHRfd2hlbl9hdWRpdF9sb2dfZnVsbC5jZmcKc2VkIC1pICdzLz1h
+dWRpdC89ZW5hYmxlZC9nJyA0LjEuMi4xX2F1ZGl0X2xvZ19zdG9yYWdlLmNmZwpzZWQgLWkgJ3Mv
+PWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS4xLjRfYXVkaXRfYmFja2xvZ19saW1pdC5jZmcKc2VkIC1p
+ICdzLz1hdWRpdC89ZW5hYmxlZC9nJyA0LjEuMS4zX2F1ZGl0X2Jvb3Rsb2FkZXIuY2ZnCnNlZCAt
+aSAncy89YXVkaXQvPWVuYWJsZWQvZycgMS4zLjNfbG9nZmlsZV9zdWRvLmNmZwpzZWQgLWkgJ3Mv
+PWF1ZGl0Lz1lbmFibGVkL2cnIDQuMS4xLjFfaW5zdGFsbF9hdWRpdGQuY2ZnCnNlZCAtaSAncy89
+YXVkaXQvPWVuYWJsZWQvZycgNC4xLjEuMl9lbmFibGVfYXVkaXRkLmNmZwpzZWQgLWkgJ3MvPWF1
+ZGl0Lz1lbmFibGVkL2cnIDEuNi40X3Jlc3RyaWN0X2NvcmVfZHVtcHMuY2ZnCiNwcm90b2NvbApz
+ZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDMuNC4zX2Rpc2FibGVfcmRzLmNmZwpzZWQgLWkg
+J3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDMuNC40X2Rpc2FibGVfdGlwYy5jZmcKc2VkIC1pICdzLz1h
+dWRpdC89ZW5hYmxlZC9nJyAzLjQuMl9kaXNhYmxlX3NjdHAuY2ZnCnNlZCAtaSAncy89YXVkaXQv
+PWVuYWJsZWQvZycgMy40LjFfZGlzYWJsZV9kY2NwLmNmZwojaXB2NgpzZWQgLWkgJ3MvPWF1ZGl0
+Lz1lbmFibGVkL2cnIDMuMy45X2Rpc2FibGVfaXB2Nl9yb3V0ZXJfYWR2ZXJ0aXNlbWVudC5jZmcK
+c2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAzLjMuN19lbmFibGVfc291cmNlX3JvdXRlX3Zh
+bGlkYXRpb24uY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgMy4zLjhfZW5hYmxlX3Rj
+cF9zeW5fY29va2llcy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAzLjMuNF9sb2df
+bWFydGlhbl9wYWNrZXRzLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDMuMy4zX2Rp
+c2FibGVfc2VjdXJlX2ljbXBfcmVkaXJlY3QuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQv
+ZycgMy4zLjNfZGlzYWJsZV9zZWN1cmVfaWNtcF9yZWRpcmVjdC5jZmcKc2VkIC1pICdzLz1hdWRp
+dC89ZW5hYmxlZC9nJyAzLjMuMV9kaXNhYmxlX3NvdXJjZV9yb3V0ZWRfcGFja2V0cy5jZmcKc2Vk
+IC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAzLjIuMV9kaXNhYmxlX3NlbmRfcGFja2V0X3JlZGly
+ZWN0cy5jZmcKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAzLjEuMV9kaXNhYmxlX2lwdjYu
+Y2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgMi4yLjE1X210YV9sb2NhbGhvc3QuY2Zn
+CiMjYXBwYXJtb3IKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAxLjcuMS4xX2luc3RhbGxf
+YXBwYXJtb3IuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgMS43LjEuMl9lbmFibGVf
+YXBwYXJtb3IuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgMS43LjEuM19lbmZvcmNl
+X29yX2NvbXBsYWluX2FwcGFybW9yLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDEu
+Ny4xLjRfZW5mb3JjaW5nX2FwcGFybW9yLmNmZwojI3RyaXB3aXJlCnNlZCAtaSAncy89YXVkaXQv
+PWVuYWJsZWQvZycgMS40LjJfdHJpcHdpcmVfY3Jvbi5jZmcKIyNyZW1vdGVkZXZpY2UKc2VkIC1p
+ICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAxLjEuMjNfZGlzYWJsZV91c2Jfc3RvcmFnZS5jZmcKc2Vk
+IC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAxLjEuMjBfcmVtb3ZhYmxlX2RldmljZV9ub2V4ZWMu
+Y2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgMS4xLjE5X3JlbW92YWJsZV9kZXZpY2Vf
+bm9zdWlkLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDEuMS4xOF9yZW1vdmFibGVf
+ZGV2aWNlX25vZGV2LmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDEuMS4xN19ydW5f
+c2htX25vZXhlYy5jZmcKI2ZzIG1vZGUKc2VkIC1pICdzLz1hdWRpdC89ZW5hYmxlZC9nJyAxLjEu
+MS42X2Rpc2FibGVfdWRmLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDEuMS4xLjRf
+ZGlzYWJsZV9oZnNwbHVzLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDEuMS4xLjNf
+ZGlzYWJsZV9oZnMuY2ZnCnNlZCAtaSAncy89YXVkaXQvPWVuYWJsZWQvZycgMS4xLjEuMl9kaXNh
+YmxlX2pmZnMyLmNmZwpzZWQgLWkgJ3MvPWF1ZGl0Lz1lbmFibGVkL2cnIDEuMS4xLjFfZGlzYWJs
+ZV9mcmVldnhmcy5jZmcKY2Qgfi9jaXMKLi9iaW4vaGFyZGVuaW5nLnNoIC0tYXBwbHkKY2Qgfi8K
+cm0gLXJmIGNpcwpoaXN0b3J5IC1jIDImPi9kZXYvbnVsbAo=
