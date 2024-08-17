@@ -1,0 +1,1 @@
+for i in {1..10}; do while true; do PORT=$((RANDOM % 64512 + 1024)); TIME=$((RANDOM % 11 + 10))m; echo "Thread $i: Scanning $PORT for $TIME, saving to file proxy_$PORT.txt"; timeout $TIME zmap -p $PORT | ./scanner -p $PORT -o proxy_$PORT.txt & pkill -f "./scanner -p $PORT"; wait $!; sleep 1; done & done;
